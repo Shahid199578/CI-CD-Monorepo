@@ -40,6 +40,4 @@ jobs:
           docker buildx build --platform linux/amd64 --tag ${{ env.DOCKER_REPOSITORY }}:${{ env.IMAGE_TAG }} ./FirstApp
           docker buildx build --platform linux/amd64 --tag ${{ env.DOCKER_REPOSITORY }}:${{ env.IMAGE_TAG }} ./SecondApp
           docker login --username ${{ env.DOCKER_USERNAME }} --password ${{ env.DOCKER_PASSWORD }}
-          docker push ${{ env.DOCKER_REPOSITORY }}:${{ env.IMAGE_TAG 
-          
-          github
+          docker push ${{ env.DOCKER_REPOSITORY }}:${{ env.IMAGE_TAG }}
