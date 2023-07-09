@@ -18,17 +18,17 @@ jobs:
           # Add build commands for FirstApp
           # Example: docker build -t ghcr.io/Shahid199578/firstapp:${{ github.sha }} ./FirstApp
 
-  build-second-app:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Build SecondApp
-        if: 'startsWith(github.event.head_commit.modified, "SecondApp/") || startsWith(github.event.head_commit.modified, "Modules/")'
-        run: |
-          cp -r Modules/* SecondApp/
-          # Add build commands for SecondApp
-          # Example: docker build -t ghcr.io/Shahid199578/secondapp:${{ github.sha }} ./SecondApp
+  # build-second-app:
+    # runs-on: ubuntu-latest
+    # steps:
+      # - name: Checkout code
+        # uses: actions/checkout@v2
+      # - name: Build SecondApp
+        # if: 'startsWith(github.event.head_commit.modified, "SecondApp/") || startsWith(github.event.head_commit.modified, "Modules/")'
+        # run: |
+          # cp -r Modules/* SecondApp/
+          # # Add build commands for SecondApp
+          # # Example: docker build -t ghcr.io/Shahid199578/secondapp:${{ github.sha }} ./SecondApp
 
   #build-both-apps:
   #  runs-on: ubuntu-latest
