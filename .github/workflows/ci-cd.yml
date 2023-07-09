@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build-and-deploy:
@@ -15,6 +15,13 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+        with:
+          driver: docker-container
+          buildkitd-flags: --allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host
+          install: false
+          use: true
+        env:
+          DOCKER_BUILDKIT: 1
 
       - name: Build and Push Docker Image
         if: ${{ startsWith(github.event.head_commit.modified, 'FirstApp/') || startsWith(github.event.head_commit.modified, 'SecondApp/') || startsWith(github.event.head_commit.modified, 'Modules/') }}
@@ -27,6 +34,7 @@ jobs:
             cp -r Modules/* SecondApp/
           fi
 
+          echo "::set-env name=IMAGE_TAG::${{ github.sha }}"
           docker buildx create --use
-          docker buildx build --platform linux/amd64 --push --tag ${{ env.REGISTRY }}/${{ env.REPO_NAME }}:latest ./FirstApp
-          docker buildx build --platform linux/amd64 --push --tag ${{ env.REGISTRY }}/${{ env.REPO_NAME }}:latest ./SecondApp
+          docker buildx build --platform linux/amd64 --push --tag ${{ env.REGISTRY }}/${{ env.REPO_NAME }}:${{ env.IMAGE_TAG }} ./FirstApp
+          docker buildx build --platform linux/amd64 --push --tag ${{ env.REGISTRY }}/${{ env.REPO_NAME }}:${{ env.IMAGE_TAG }} ./SecondApp
