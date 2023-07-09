@@ -1,0 +1,64 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-first-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build FirstApp
+        if: 'startsWith(github.event.head_commit.modified, "FirstApp/") || startsWith(github.event.head_commit.modified, "Modules/")'
+        run: |
+          cp -r Modules/* FirstApp/
+          # Add build commands for FirstApp
+          # Example: docker build -t ghcr.io/Shahid199578/firstapp:${{ github.sha }} ./FirstApp
+
+  build-second-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build SecondApp
+        if: 'startsWith(github.event.head_commit.modified, "SecondApp/") || startsWith(github.event.head_commit.modified, "Modules/")'
+        run: |
+          cp -r Modules/* SecondApp/
+          # Add build commands for SecondApp
+          # Example: docker build -t ghcr.io/Shahid199578/secondapp:${{ github.sha }} ./SecondApp
+
+  build-both-apps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build FirstApp
+        if: 'startsWith(github.event.head_commit.modified, "Modules/")'
+        run: |
+          cp -r Modules/* FirstApp/
+          # Add build commands for FirstApp
+          docker build -t ghcr.io/Shahid199578/firstapp:${{ github.sha }} ./FirstApp
+      - name: Build SecondApp
+        if: 'startsWith(github.event.head_commit.modified, "Modules/")'
+        run: |
+          cp -r Modules/* SecondApp/
+          # Add build commands for SecondApp
+          docker build -t ghcr.io/Shahid199578/secondapp:${{ github.sha }} ./SecondApp
+          
+          
+    - name: Push FirstApp image to GHCR
+      if: ${{ success() && (startsWith(github.event.head_commit.modified, "FirstApp/") || startsWith(github.event.head_commit.modified, "Modules/")) }}
+      run: |
+        docker tag ghcr.io/Shahid199578/firstapp:${{ github.sha }} ghcr.io/Shahid199578/firstapp:latest
+        docker push ghcr.io/Shahid199578/firstapp:${{ github.sha }}
+        docker push ghcr.io/Shahid199578/firstapp:latest
+
+    - name: Push SecondApp image to GHCR
+      if: ${{ success() && (startsWith(github.event.head_commit.modified, "SecondApp/") || startsWith(github.event.head_commit.modified, "Modules/")) }}
+      run: |
+        docker tag ghcr.io/Shahid199578/secondapp:${{ github.sha }} ghcr.io/Shahid199578/secondapp:latest
+        docker push ghcr.io/Shahid199578/secondapp:${{ github.sha }}
+        docker push ghcr.io/Shahid199578/secondapp:latest
