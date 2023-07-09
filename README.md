@@ -56,10 +56,13 @@ To use this monorepo or run the CI/CD pipeline locally, you can follow these ste
 Make the necessary changes or additions to the FirstApp, SecondApp, and Modules directories.
 
 2. Commit and push your changes to the master branch:
-```git add .
+
+```
+git add .
 git commit -m "Update code"
 git push origin master
 ```
+
 3. Monitor the CI/CD pipeline in the "Actions" tab of the repository on GitHub.
 
 4. Once the pipeline completes, the Docker images will be available in GHCR for use or deployment.
