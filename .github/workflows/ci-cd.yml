@@ -26,8 +26,9 @@ jobs:
       - name: Build and Push Docker Image
         if: ${{ startsWith(github.event.head_commit.modified, 'FirstApp/') || startsWith(github.event.head_commit.modified, 'SecondApp/') || startsWith(github.event.head_commit.modified, 'Modules/') }}
         env:
-          REGISTRY: ghcr.io
-          REPO_NAME: Shahid199578/monorepo
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_REPOSITORY: shahid199578/monorepo
         run: |
           if [[ ${{ startsWith(github.event.head_commit.modified, 'Modules/') }} == 'true' ]]; then
             cp -r Modules/* FirstApp/
@@ -36,5 +37,7 @@ jobs:
 
           echo "::set-env name=IMAGE_TAG::${{ github.sha }}"
           docker buildx create --use
-          docker buildx build --platform linux/amd64 --push --tag ${{ env.REGISTRY }}/${{ env.REPO_NAME }}:${{ env.IMAGE_TAG }} ./FirstApp
-          docker buildx build --platform linux/amd64 --push --tag ${{ env.REGISTRY }}/${{ env.REPO_NAME }}:${{ env.IMAGE_TAG }} ./SecondApp
+          docker buildx build --platform linux/amd64 --tag ${{ env.DOCKER_REPOSITORY }}:${{ env.IMAGE_TAG }} ./FirstApp
+          docker buildx build --platform linux/amd64 --tag ${{ env.DOCKER_REPOSITORY }}:${{ env.IMAGE_TAG }} ./SecondApp
+          docker login --username ${{ env.DOCKER_USERNAME }} --password ${{ env.DOCKER_PASSWORD }}
+          docker push ${{ env.DOCKER_REPOSITORY }}:${{ env.IMAGE_TAG }}
