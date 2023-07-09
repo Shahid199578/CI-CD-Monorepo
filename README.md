@@ -7,17 +7,35 @@ This repository contains a monorepo for two applications, FirstApp and SecondApp
 The structure of the monorepo is as follows:
 
 .
+
 ├── FirstApp
-│ ├── file1
-│ ├── file2
-│ └── ...
-├── SecondApp
-│ ├── file1
-│ ├── file2
-│ └── ...
-└── Modules
+
+│ 
 ├── file1
+
+│ 
 ├── file2
+
+│ 
+└── ...
+
+├── SecondApp
+
+│ 
+├── file1
+
+│ 
+├── file2
+
+│ 
+└── ...
+
+└── Modules
+
+├── file1
+
+├── file2
+
 └── ...
 
 - The `FirstApp` directory contains files specific to the FirstApp application.
